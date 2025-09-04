@@ -1,0 +1,69 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Drug {
+  id               String   @id @default(cuid())
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  
+  name             String   @unique
+  genericName      String?
+  brandNames       String[]
+  
+  fdaLabelData     Json?
+  fdaGenericName   String?
+  fdaBrandName     String?
+  manufacturer     String?
+  route            String?
+  
+  indications      String?
+  contraindications String?
+  warnings         String?
+  boxedWarning     String?
+  dosageInfo       String?
+  adverseReactions String?
+  
+  aiEnhancedTitle       String?
+  aiEnhancedDescription String?
+  seoMetaTitle         String?
+  seoMetaDescription   String?
+  
+  faqs             DrugFAQ[]
+  
+  published        Boolean  @default(false)
+  slug             String   @unique
+  
+  // Indexes for performance optimization
+  @@index([published])
+  @@index([manufacturer])
+  @@index([route])
+  @@index([genericName])
+  @@index([createdAt])
+  @@index([name, published])
+  @@index([manufacturer, published])
+  @@index([name, genericName, manufacturer])
+  @@map("drugs")
+}
+
+model DrugFAQ {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  question  String
+  answer    String
+  
+  drugId    String
+  drug      Drug     @relation(fields: [drugId], references: [id], onDelete: Cascade)
+  
+  // Indexes for performance optimization
+  @@index([drugId])
+  @@index([question, answer])
+  @@map("drug_faqs")
+}

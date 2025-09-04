@@ -1,0 +1,19 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: http://localhost:3000/sitemap.xml
+
+# Block development and admin paths
+Disallow: /api/
+Disallow: /_next/
+Disallow: /admin/
+Disallow: /dev/
+
+# Allow important drug information paths
+Allow: /drugs/
+Allow: /search/
+Allow: /provider-explanations/
+
+# Cache: 1 day
+Cache-control: max-age=86400
